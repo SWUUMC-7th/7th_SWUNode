@@ -1,0 +1,10 @@
+CREATE TABLE mission (
+    mission_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    store_id BIGINT,
+    mission_name VARCHAR(20) NOT NULL,
+    points BIGINT NOT NULL,
+    expiration_date DATETIME NOT NULL,
+    created_at DATETIME(6) DEFAULT CURRENT_TIMESTAMP(6),
+    updated_at DATETIME(6) DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+    FOREIGN KEY (store_id) REFERENCES store(store_id)
+);

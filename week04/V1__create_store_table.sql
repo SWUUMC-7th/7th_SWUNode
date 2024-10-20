@@ -1,0 +1,8 @@
+CREATE TABLE store (
+    store_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    store_name VARCHAR(20) NOT NULL,
+    region_id BIGINT,
+    created_at DATETIME(6) DEFAULT CURRENT_TIMESTAMP(6),
+    updated_at DATETIME(6) DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+    FOREIGN KEY (region_id) REFERENCES region(region_id)
+);
