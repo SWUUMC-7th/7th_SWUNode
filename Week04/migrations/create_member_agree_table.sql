@@ -1,0 +1,8 @@
+CREATE TABLE member_agree(
+id BIGINT AUTO_INCREMENT PRIMARY KEY,
+member_id BIGINT,
+terms_id BIGINT,
+created_at TIMESTAMP,
+updated_at TIMESTAMP,
+FOREIGN KEY (member_id) REFERENCES member(id) ON DELETE CASCADE,
+FOREIGN KEY (terms_id) REFERENCES terms(id) ON DELETE CASCADE);
