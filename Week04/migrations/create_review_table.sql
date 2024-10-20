@@ -1,0 +1,9 @@
+
+CREATE TABLE review(
+id BIGINT AUTO_INCREMENT PRIMARY KEY,
+member_id BIGINT,
+store_id BIGINT,
+body TEXT,
+score FLOAT,
+FOREIGN KEY (member_id) REFERENCES member(id) ON DELETE CASCADE,
+FOREIGN KEY (store_id) REFERENCES store(id) ON DELETE CASCADE);

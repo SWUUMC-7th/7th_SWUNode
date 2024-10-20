@@ -1,0 +1,5 @@
+CREATE TABLE region(
+id BIGINT AUTO_INCREMENT PRIMARY KEY,
+name VARCHAR(20),
+created_at TIMESTAMP,
+updated_at TIMESTAMP);

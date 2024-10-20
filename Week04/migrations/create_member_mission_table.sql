@@ -1,0 +1,10 @@
+CREATE TABLE member_mission(
+id BIGINT AUTO_INCREMENT PRIMARY KEY,
+member_id BIGINT,
+mission_id BIGINT,
+status VARCHAR(15) CHECK (status IN ('PENDING', 'COMPLETED')),
+created_at TIMESTAMP,
+updated_at TIMESTAMP,
+FOREIGN KEY(member_id) REFERENCES member(id) ON DELETE CASCADE,
+FOREIGN KEY(mission_id) REFERENCES mission(id) ON DELETE CASCADE);
+

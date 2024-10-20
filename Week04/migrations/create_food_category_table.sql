@@ -1,0 +1,5 @@
+CREATE TABLE food_category(
+id BIGINT AUTO_INCREMENT PRIMARY KEY,
+name VARCHAR(15),
+created_at TIMESTAMP,
+updated_at TIMESTAMP);

@@ -1,0 +1,7 @@
+CREATE TABLE terms(
+id BIGINT AUTO_INCREMENT PRIMARY KEY,
+title VARCHAR(20),
+body TEXT,
+optional BOOLEAN,
+created_at TIMESTAMP,
+updated_at TIMESTAMP);

@@ -1,0 +1,9 @@
+CREATE TABLE store(
+id BIGINT AUTO_INCREMENT PRIMARY KEY,
+region_id BIGINT,
+name VARCHAR(50),
+address VARCHAR(50),
+score FLOAT,
+created_at TIMESTAMP,
+updated_at TIMESTAMP,
+FOREIGN KEY(region_id) REFERENCES region(id) ON DELETE CASCADE); 
