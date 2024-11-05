@@ -1,0 +1,9 @@
+export const bodyToReview = (body) => {
+    return {
+      storeId: body.storeId,
+      userId: body.userId,
+      rating: body.rating,
+      comment: body.comment,
+    };
+  };
+  
