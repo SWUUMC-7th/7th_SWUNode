@@ -1,7 +1,7 @@
 export const bodyToReview = (body) => {
     return {
-      store_id: body.store_id,
-      user_id: body.user_id,
+      storeId: body.storeId,
+      userId: body.userId,
       body: body.body,
       score: body.score,
     };
@@ -9,13 +9,13 @@ export const bodyToReview = (body) => {
   
   export const responseFromReview = (review) => {
     return {
-      review_id: review.review_id,
-      store_id: review.store_id,
-      user_id: review.user_id,
+      reviewId: review.reviewId,
+      storeId: review.storeId,
+      userId: review.userId,
       body: review.body,
       score: review.score,
-      created_at: review.created_at,
-      updated_at: review.updated_at,
+      createdAt: review.createdAt,
+      updatedAt: review.updatedAt,
     };
   };
   

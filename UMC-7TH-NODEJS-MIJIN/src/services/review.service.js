@@ -3,7 +3,7 @@ import { responseFromReview } from "../dtos/review.dto.js"; // 리뷰 데이터�
 
 export const createReview = async (data) => {
   // 리뷰를 추가할 가게가 존재하는지 확인
-  const store = await findStoreById(data.store_id);
+  const store = await findStoreById(data.storeId);
   
   if (!store) {
     throw new Error("해당 가게가 존재하지 않습니다.");
@@ -11,8 +11,8 @@ export const createReview = async (data) => {
 
   // 리뷰 추가
   const newReview = await addReview({
-    store_id: data.store_id,
-    user_id: data.user_id,
+    storeId: data.storeId,
+    userId: data.userId,
     body: data.body,
     score: data.score,
   });
@@ -21,8 +21,8 @@ export const createReview = async (data) => {
 };
 
 // 특정 가게의 리뷰 목록을 조회
-export const getReviewsByStore = async (store_id) => {
-  const store = await findStoreById(store_id);
+export const getReviewsByStore = async (storeId) => {
+  const store = await findStoreById(storeId);
 
   if (!store) {
     throw new Error("해당 가게가 존재하지 않습니다.");

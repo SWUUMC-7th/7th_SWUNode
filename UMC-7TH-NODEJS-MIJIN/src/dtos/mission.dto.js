@@ -1,15 +1,15 @@
 export class MissionDTO {
-    constructor(store_id, mission_id, mission_name, reward) {
-        this.mission_id = mission_id;
-        this.store_id = store_id;
-        this.mission_name = mission_name;
+    constructor(store_id, missionId, missionName, reward) {
+        this.missionId = missionId;
+        this.storeId = storeId;
+        this.missionName = missionName;
         this.reward = reward;
     }
 
     static validate(missionData) {
-        const { store_id, mission_id, mission_name, reward } = missionData;
+        const { storeId, missionId, missionName, reward } = missionData;
 
-        if (!store_id || !mission_id || !mission_name || typeof reward !== "number") {
+        if (!storeId || !missionId || !missionName || typeof reward !== "number") {
             throw new Error("잘못된 데이터입니다. 모든 필드를 올바르게 입력하세요.");
         }
     }

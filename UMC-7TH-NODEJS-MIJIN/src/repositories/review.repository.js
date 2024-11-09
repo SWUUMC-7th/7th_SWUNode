@@ -1,13 +1,13 @@
 import { pool } from "../db.config.js";
 
 // 가게 존재 여부 확인
-export const findStoreById = async (store_id) => {
+export const findStoreById = async (storeId) => {
   const conn = await pool.getConnection();
 
   try {
     const [store] = await pool.query(
-      `SELECT * FROM store WHERE store_id = ?;`,
-      [store_id]
+      `SELECT * FROM store WHERE storeId = ?;`,
+      [storeId]
     );
 
     return store.length > 0 ? store[0] : null;
@@ -24,16 +24,16 @@ export const addReview = async (reviewData) => {
 
   try {
     const [result] = await pool.query(
-      `INSERT INTO review (store_id, user_id, body, score, created_at) VALUES (?, ?, ?, ?, NOW());`,
+      `INSERT INTO review (storeId, userId, body, score, createdAt) VALUES (?, ?, ?, ?, NOW());`,
       [
-        reviewData.store_id,
-        reviewData.user_id,
+        reviewData.storeId,
+        reviewData.userId,
         reviewData.body,
         reviewData.score
       ]
     );
 
-    return { review_id: result.insertId, ...reviewData };
+    return { reviewId: result.insertId, ...reviewData };
   } catch (err) {
     throw new Error(`리뷰 추가 중 오류가 발생했습니다. (${err})`);
   } finally {
@@ -42,17 +42,17 @@ export const addReview = async (reviewData) => {
 };
 
 // 특정 가게의 리뷰 목록 조회
-export const getReviewsByStoreId = async (store_id) => {
+export const getReviewsByStoreId = async (storeId) => {
   const conn = await pool.getConnection();
 
   try {
     const [reviews] = await pool.query(
-      `SELECT r.review_id, r.user_id, r.body, r.score, r.created_at, r.updated_at, u.username
+      `SELECT r.reviewId, r.userId, r.body, r.score, r.createdAt, r.updatedAt, u.userName
        FROM review r
-       JOIN user u ON r.user_id = u.id
-       WHERE r.store_id = ?
-       ORDER BY r.created_at DESC;`,
-      [store_id]
+       JOIN user u ON r.userId = u.id
+       WHERE r.storeId = ?
+       ORDER BY r.createdAt DESC;`,
+      [storeId]
     );
 
     return reviews;

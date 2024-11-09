@@ -6,8 +6,8 @@ export const addStore = async (data) => {
 
   try {
     const [result] = await pool.query(
-      `INSERT INTO store (store_id, store_name, store_address, phone_number, region_id) VALUES (?, ?, ?, ?);`,
-      [data.store_id, data.store_name, data.store_address, data.phone_number, data.regionId]
+      `INSERT INTO store (storeId, storeName, storeAddress, phoneNumber, regionId) VALUES (?, ?, ?, ?);`,
+      [data.storeId, data.storeName, data.storeAddress, data.phoneNumber, data.regionId]
     );
 
     return result.insertId;
@@ -24,7 +24,7 @@ export const findStoresByRegionId = async (regionId) => {
 
   try {
     const [stores] = await pool.query(
-      `SELECT * FROM store WHERE region_id = ?;`,
+      `SELECT * FROM store WHERE regionId = ?;`,
       [regionId]
     );
 

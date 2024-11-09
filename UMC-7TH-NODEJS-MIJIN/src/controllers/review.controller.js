@@ -19,11 +19,11 @@ export const handleCreateReview = async (req, res, next) => {
 
 // 특정 가게의 리뷰 목록 조회 요청 핸들러
 export const handleGetReviewsByStore = async (req, res, next) => {
-  const { store_id } = req.params;
-  
+  const { storeId } = req.params;  // storeId로 파라미터를 받아옵니다.
+
   try {
-    const review = await getReviewsByStore(store_id);
-    res.status(StatusCodes.OK).json({ result: review });
+    const reviews = await getReviewsByStore(storeId);  // getReviewsByStore 함수에서 리뷰 데이터를 가져옵니다.
+    res.status(StatusCodes.OK).json({ result: reviews });
   } catch (error) {
     console.error(error);
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).send('Server error');

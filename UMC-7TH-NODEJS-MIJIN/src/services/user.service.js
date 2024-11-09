@@ -10,12 +10,12 @@ import {
 export const userSignUp = async (data) => {
   const joinUserId = await addUser({
     email: data.email,
-    username: data.username,
+    userName: data.userName,
     gender: data.gender,
     dob: data.dob,
     address: data.address,
-    detail_address: data.detail_address,
-    phone_number: data.phone_number,
+    detailAddress: data.detailAddress,
+    phoneNumber: data.phoneNumber,
   });
 
   if (joinUserId === null) {

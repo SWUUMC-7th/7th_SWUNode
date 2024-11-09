@@ -15,3 +15,11 @@ export const handleCreateStore = async (req, res, next) => {
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).send("서버 오류 발생");
   }
 };
+
+export const handleListStoreReviews = async (req, res, next) => {
+  const reviews = await listStoreReviews(
+    parseInt(req.params.storeId),
+    typeof req.query.cursor === "string" ? parseInt(req.query.cursor) : 0
+  );
+  res.status(StatusCodes.OK).success(reviews);
+};

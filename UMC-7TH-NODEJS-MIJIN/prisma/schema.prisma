@@ -1,0 +1,79 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+
+model FoodCategory {
+  FoodCategoryId   BigInt @id @default(autoincrement()) 
+  FoodCategoryName String @db.VarChar(100)
+
+  userFavorCategories UserFavorCategory[] 
+
+  @@map("foodCategory")
+}
+
+model UserFavorCategory {
+  userFavorCategoryId BigInt   @id @default(autoincrement())
+  userId              BigInt
+  foodCategoryId      BigInt
+
+  user                User       @relation(fields: [userId], references: [userId]) 
+  foodCategory        FoodCategory @relation(fields: [foodCategoryId], references: [FoodCategoryId]) 
+
+  @@index([foodCategoryId], map: "userFavorCategory_foodCategoryId_index")
+  @@index([userId], map: "userFavorCategory_userId_index")
+
+  @@map("userFavorCategory")
+}
+
+model User {
+  userId            BigInt      @id @default(autoincrement()) 
+  email             String      @unique(map: "email") @db.VarChar(100)
+  userName          String      @db.VarChar(100)
+  gender            String      @db.VarChar(10)
+  dob               DateTime    @db.Date
+  address           String      @db.VarChar(255)
+  detailAddress     String?     @map("detailAddress") @db.VarChar(255)
+  phoneNumber       String      @map("phoneNumber") @db.VarChar(100)
+
+  userFavorCategories UserFavorCategory[]
+  userStoreReviews   UserStoreReview[]  
+
+  @@map("user")
+}
+
+model UserStoreReview {
+  userStoreReviewId BigInt   @id @default(autoincrement())
+  storeId           BigInt
+  userId            BigInt
+  content           String   @db.Text
+
+  store             Store    @relation(fields: [storeId], references: [storeId]) // Store 모델과 관계 설정
+  user              User     @relation(fields: [userId], references: [userId]) // User 모델과 관계 설정
+
+  @@index([storeId], map: "userStoreReview_storeId_index")  // storeId 인덱스
+  @@index([userId], map: "userStoreReview_userId_index")    // userId 인덱스
+  @@map("userStoreReview")
+}
+
+model Store {
+  storeId    BigInt  @id @default(autoincrement())
+  storeName  String  @db.VarChar(100)
+
+  userStoreReviews UserStoreReview[] // UserStoreReview 모델과의 관계
+
+  @@map("store")
+}
+
+

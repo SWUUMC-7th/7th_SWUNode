@@ -16,3 +16,25 @@ export const handleUserSignUp = async (req, res, next) => {
   const user = await userSignUp(bodyToUser(req.body));
   res.status(StatusCodes.OK).json({ result: user });
 };
+
+// controllers/user.controller.js
+
+export const getUser = async (req, res) => {
+  console.log('Received request for userId:', req.params.userId); // 로그 추가
+  const { userId } = req.params;
+  try {
+    const user = await prisma.user.findUnique({
+      where: { userId: Number(userId) },
+    });
+    if (user) {
+      res.json(user);
+    } else {
+      res.status(404).json({ message: "User not found" });
+    }
+  } catch (error) {
+    console.error('Error retrieving user:', error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+

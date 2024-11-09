@@ -3,29 +3,25 @@ export const bodyToUser = (body) => {
 
   return {
     email: body.email,
-    username: body.username,
+    userName: body.userName,
     gender: body.gender,
     dob,
     address: body.address || "",
-    detail_address: body.detail_address || "",
-    phone_number: body.phone_number,
+    detailAddress: body.detailAddress || "",
+    phoneNumber: body.phoneNumber,
     preferences: body.preferences,
   };
 };
 
-export const responseFromUser = (user) => {
+export const responseFromUser = ({ user, preferences }) => {
+  const preferFoods = preferences.map(
+    (preference) => preference.foodCategory.name
+  );
+
   return {
-    user_id: user.user_id,
     email: user.email,
-    username: user.username,
-    gender: user.gender,
-    dob: user.dob.toISOString().split('T')[0],  // 날짜를 YYYY-MM-DD 형식으로 변환
-    address: user.address || "",
-    detail_address: user.detail_address || "",
-    phone_number: user.phone_number,
-    preferences: user.preferences || [],  // 기본적으로 빈 배열로 설정
-    created_at: user.created_at ? user.created_at.toISOString() : null,
-    updated_at: user.updated_at ? user.updated_at.toISOString() : null,
+    name: user.name,
+    preferCategory: preferFoods,
   };
 };
 

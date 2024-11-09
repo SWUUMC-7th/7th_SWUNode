@@ -2,10 +2,14 @@ import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 import { handleUserSignUp } from "./controllers/user.controller.js";
-import { handleCreateReview, handleGetReviewsByStore } from "./controllers/review.controller.js";
+import { handleCreateReview } from './controllers/review.controller.js';
 import { handleCreateStore } from "./controllers/store.controller.js"; 
 import { handleCreateMission } from './controllers/mission.controller.js'; 
 import { handleChallengeMission } from './controllers/userMission.controller.js'; // 미션 도전 핸들러 추가
+import { getUser } from "./controllers/user.controller.js";
+import { handleGetReviewsByStore } from './controllers/review.controller.js';
+
+
 
 dotenv.config();
 
@@ -23,6 +27,9 @@ app.get("/", (req, res) => {
 
 // 사용자 회원가입
 app.post("/api/v1/users/signup", handleUserSignUp);
+
+// 사용자 정보 조회 API 추가
+app.get("/api/v1/users/:userId", getUser);
 
 // 리뷰 추가
 app.post("/api/v1/reviews", handleCreateReview);

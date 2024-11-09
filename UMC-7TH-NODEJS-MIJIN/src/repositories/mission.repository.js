@@ -20,13 +20,13 @@ export const findStoreById = async (store_id) => {
 
 // 미션 추가
 export const addMission = async (mission) => {
-  const { store_id, mission_name, reward } = mission; // mission_id는 필요 없으므로 제거
+  const { storeId, missionName, reward } = mission; // mission_id는 필요 없으므로 제거
   const conn = await pool.getConnection(); // 연결 가져오기
 
   try {
     const [result] = await conn.query(
-      `INSERT INTO mission (store_id, mission_name, reward) VALUES (?, ?, ?)`,
-      [store_id, mission_name, reward] // mission_id를 제거하여 삽입
+      `INSERT INTO mission (storeId, missionName, reward) VALUES (?, ?, ?)`,
+      [storeId, missionName, reward] // mission_id를 제거하여 삽입
     );
 
     console.log(`새로운 미션 추가됨: ${result.insertId}`); // 추가된 미션 ID 출력
