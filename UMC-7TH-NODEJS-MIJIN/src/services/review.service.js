@@ -31,3 +31,24 @@ export const getReviewsByStore = async (storeId) => {
   const review = await getReviewsByStoreId(storeId);
   return review.map(responseFromReview);
 };
+
+// 사용자 ID로 리뷰 조회
+export const findReviewsByUserId = async (userId) => {
+  try {
+    const reviews = await prisma.review.findMany({
+      where: {
+        userId: userId, // 사용자 ID로 필터링
+      },
+      include: {
+        store: true,  // 리뷰와 관련된 가게 정보 포함
+      },
+      orderBy: {
+        createdAt: 'desc', // 최신 리뷰부터 정렬
+      },
+    });
+
+    return reviews;
+  } catch (error) {
+    throw new Error(`리뷰 조회 중 오류가 발생했습니다. (${error.message})`);
+  }
+};

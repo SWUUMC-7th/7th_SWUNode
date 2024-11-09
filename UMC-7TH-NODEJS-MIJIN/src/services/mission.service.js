@@ -1,5 +1,7 @@
 // src/services/mission.service.js
 import { addMission, findStoreById } from "../repositories/mission.repository.js"; // findStoreById 추가
+import { getMissionsByStoreId, getInProgressMissionsByUserId, completeMission } from "../repositories/mission.repository.js";
+
 
 // 가게에 미션 추가
 export const createMission = async (data) => {
@@ -23,4 +25,34 @@ export const createMission = async (data) => {
 
   console.log("새로운 미션이 추가되었습니다. 미션 ID:", missionId); // 추가된 미션 ID 출력
   return missionId;
+};
+
+// 내가 진행 중인 미션 목록 조회
+export const handleGetInProgressMissionsByUserId = async (userId) => {
+  try {
+    const missions = await getInProgressMissionsByUserId(userId);  // 리포지토리 함수 호출
+    return missions;
+  } catch (error) {
+    throw new Error(`진행 중인 미션 목록 조회 오류: ${error.message}`);
+  }
+};
+
+// 진행 중인 미션을 완료로 변경
+export const handleCompleteMission = async (missionId) => {
+  try {
+    const updatedMission = await completeMission(missionId);  // 리포지토리 함수 호출
+    return updatedMission;
+  } catch (error) {
+    throw new Error(`미션 완료 처리 오류: ${error.message}`);
+  }
+};
+
+// 특정 가게의 미션 목록 조회
+export const handleGetMissionsByStoreId = async (storeId) => {
+  try {
+    const missions = await getMissionsByStoreId(storeId);  // 리포지토리 함수 호출
+    return missions;
+  } catch (error) {
+    throw new Error(`특정 가게 미션 목록 조회 오류: ${error.message}`);
+  }
 };

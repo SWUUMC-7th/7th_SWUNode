@@ -1,5 +1,5 @@
 export class MissionDTO {
-    constructor(store_id, missionId, missionName, reward) {
+    constructor(storeId, missionId, missionName, reward) {
         this.missionId = missionId;
         this.storeId = storeId;
         this.missionName = missionName;
