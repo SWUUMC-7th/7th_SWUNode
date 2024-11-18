@@ -1,0 +1,121 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+
+model FoodCategory {
+  FoodCategoryId   BigInt @id @default(autoincrement()) 
+  FoodCategoryName String @db.VarChar(100)
+
+  userFavorCategories UserFavorCategory[] 
+
+  @@map("foodCategory")
+}
+
+model UserFavorCategory {
+  userFavorCategoryId BigInt   @id @default(autoincrement())
+  userId              BigInt
+  foodCategoryId      BigInt
+
+  user                User       @relation(fields: [userId], references: [userId]) 
+  foodCategory        FoodCategory @relation(fields: [foodCategoryId], references: [FoodCategoryId]) 
+
+  @@index([foodCategoryId], map: "userFavorCategory_foodCategoryId_index")
+  @@index([userId], map: "userFavorCategory_userId_index")
+
+  @@map("userFavorCategory")
+}
+
+model User {
+  userId            BigInt      @id @default(autoincrement()) 
+  email             String      @unique(map: "email") @db.VarChar(100)
+  userName          String      @db.VarChar(100)
+  gender            String      @db.VarChar(10)
+  dob               DateTime    @db.Date
+  address           String      @db.VarChar(255)
+  detailAddress     String?     @map("detailAddress") @db.VarChar(255)
+  phoneNumber       String      @map("phoneNumber") @db.VarChar(100)
+  preferences       Json?       // JSON 타입으로 변경
+
+  userFavorCategories UserFavorCategory[]
+  userStoreReviews   UserStoreReview[]
+  reviews            Review[]   // Review 모델과의 관계
+  missions           Mission[]  // Mission 모델과의 관계
+
+  @@map("user")
+}
+
+model UserStoreReview {
+  userStoreReviewId BigInt   @id @default(autoincrement())
+  storeId           BigInt
+  userId            BigInt
+  content           String   @db.Text
+
+  store             Store    @relation(fields: [storeId], references: [storeId]) // Store 모델과 관계 설정
+  user              User     @relation(fields: [userId], references: [userId]) // User 모델과 관계 설정
+
+  @@index([storeId], map: "userStoreReview_storeId_index")  // storeId 인덱스
+  @@index([userId], map: "userStoreReview_userId_index")    // userId 인덱스
+  @@map("userStoreReview")
+}
+
+model Store {
+  storeId    BigInt    @id @default(autoincrement())
+  storeName  String    @db.VarChar(100)
+  storeAddress  String          @db.VarChar(255) // 추가
+  phoneNumber   String          @db.VarChar(20)  // 추가
+  regionId      BigInt          
+  region        Region          @relation(fields: [regionId], references: [regionId]) // 외래키 관계 설정
+
+  userStoreReviews UserStoreReview[] // Store 모델과의 관계
+  reviews          Review[] // 반대 관계 필드 추가
+  missions         Mission[] // 반대 관계 필드 추가
+
+  @@map("store")
+}
+
+model Review {
+  reviewId  BigInt   @id @default(autoincrement())
+  storeId   BigInt
+  userId    BigInt
+  body      String
+  score     Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user      User    @relation(fields: [userId], references: [userId]) // userId 참조
+  store     Store   @relation(fields: [storeId], references: [storeId]) // storeId 참조
+}
+
+model Mission {
+  missionId   BigInt   @id @default(autoincrement())
+  description String
+  status      String   @default("in-progress") // "in-progress", "completed"
+  storeId     BigInt
+  userId      BigInt
+  createdAt   DateTime @default(now())
+
+  user        User     @relation(fields: [userId], references: [userId]) // userId 참조
+  store       Store    @relation(fields: [storeId], references: [storeId]) // storeId 참조
+}
+
+model Region {
+  regionId   BigInt    @id @default(autoincrement())
+  regionName String    @db.VarChar(100)
+
+  stores     Store[]   // Store 모델과의 관계
+}
+
+
+
