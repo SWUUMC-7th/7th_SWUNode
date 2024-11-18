@@ -9,7 +9,7 @@ export const bodyToUser = (body) => {
     address: body.address || "",
     detailAddress: body.detailAddress || "",
     phoneNumber: body.phoneNumber,
-    preferences: body.preferences,
+    preferences: body.preferences || null,  
   };
 };
 

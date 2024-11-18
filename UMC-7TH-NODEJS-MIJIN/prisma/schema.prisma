@@ -46,6 +46,7 @@ model User {
   address           String      @db.VarChar(255)
   detailAddress     String?     @map("detailAddress") @db.VarChar(255)
   phoneNumber       String      @map("phoneNumber") @db.VarChar(100)
+  preferences       Json?       // JSON 타입으로 변경
 
   userFavorCategories UserFavorCategory[]
   userStoreReviews   UserStoreReview[]
@@ -72,6 +73,10 @@ model UserStoreReview {
 model Store {
   storeId    BigInt    @id @default(autoincrement())
   storeName  String    @db.VarChar(100)
+  storeAddress  String          @db.VarChar(255) // 추가
+  phoneNumber   String          @db.VarChar(20)  // 추가
+  regionId      BigInt          
+  region        Region          @relation(fields: [regionId], references: [regionId]) // 외래키 관계 설정
 
   userStoreReviews UserStoreReview[] // Store 모델과의 관계
   reviews          Review[] // 반대 관계 필드 추가
@@ -103,6 +108,13 @@ model Mission {
 
   user        User     @relation(fields: [userId], references: [userId]) // userId 참조
   store       Store    @relation(fields: [storeId], references: [storeId]) // storeId 참조
+}
+
+model Region {
+  regionId   BigInt    @id @default(autoincrement())
+  regionName String    @db.VarChar(100)
+
+  stores     Store[]   // Store 모델과의 관계
 }
 
 

@@ -6,8 +6,8 @@ export const addStore = async (data) => {
 
   try {
     const [result] = await pool.query(
-      `INSERT INTO store (storeId, storeName, storeAddress, phoneNumber, regionId) VALUES (?, ?, ?, ?);`,
-      [data.storeId, data.storeName, data.storeAddress, data.phoneNumber, data.regionId]
+      `INSERT INTO store (storeName, storeAddress, phoneNumber, regionId) VALUES (?, ?, ?, ?);`,
+      [data.storeName, data.storeAddress, data.phoneNumber, data.regionId]
     );
 
     return result.insertId;
