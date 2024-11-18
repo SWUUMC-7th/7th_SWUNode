@@ -1,18 +1,21 @@
+import { prisma } from '../db.config.js';
 import { StatusCodes } from "http-status-codes";
 import { createStore } from "../services/store.service.js";
 
 export const handleCreateStore = async (req, res, next) => {
-  console.log("가게 추가 요청을 받았습니다!");
-  console.log("body:", req.body); // 요청 본문 확인용
+  console.log("가게 추가 요청:", req.body);
 
   try {
-    const storeData = req.body; // 요청 본문에서 가게 정보 가져오기
-    const newStore = await createStore(storeData); // 서비스로 가게 생성 요청
-
-    res.status(StatusCodes.CREATED).json({ result: newStore }); // 성공적으로 생성되면 응답
+    const store = await prisma.store.create({
+      data: req.body,
+    });
+    res.status(StatusCodes.OK).success(store); // 상태 코드와 함께 성공 응답
   } catch (error) {
-    console.error(error);
-    res.status(StatusCodes.INTERNAL_SERVER_ERROR).send("서버 오류 발생");
+    console.error("가게 추가 중 오류 발생:", error);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).error({
+      errorCode: "store_creation_failed",
+      reason: "가게 추가에 실패했습니다.",
+    });
   }
 };
 

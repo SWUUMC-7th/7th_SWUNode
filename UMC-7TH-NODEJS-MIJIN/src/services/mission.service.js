@@ -1,6 +1,6 @@
 // src/services/mission.service.js
-import { addMission, findStoreById } from "../repositories/mission.repository.js"; // findStoreById 추가
-import { getMissionsByStoreId, getInProgressMissionsByUserId, completeMission } from "../repositories/mission.repository.js";
+import { prisma } from "../db.config.js";
+import { MissionUpdateError } from "../errors.js";
 
 
 // 가게에 미션 추가
@@ -38,12 +38,19 @@ export const handleGetInProgressMissionsByUserId = async (userId) => {
 };
 
 // 진행 중인 미션을 완료로 변경
-export const handleCompleteMission = async (missionId) => {
+export const markMissionAsCompleted = async (userId, missionId) => {
   try {
-    const updatedMission = await completeMission(missionId);  // 리포지토리 함수 호출
-    return updatedMission;
+    return await prisma.userMission.update({
+      where: { userId: Number(userId), missionId: Number(missionId) },
+      data: { status: "completed" },
+    });
   } catch (error) {
-    throw new Error(`미션 완료 처리 오류: ${error.message}`);
+    console.error("미션 완료 업데이트 중 오류:", error);
+    throw new MissionUpdateError("미션 완료 처리에 실패했습니다.", {
+      userId,
+      missionId,
+      originalError: error.message,
+    });
   }
 };
 

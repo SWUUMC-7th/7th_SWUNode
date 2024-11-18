@@ -1,24 +1,28 @@
 import { createRegion } from "../services/region.service.js";
-import { RegionDTO } from "../dtos/region.dto.js";
+import { StatusCodes } from "http-status-codes";
 
 // 지역 추가
 export const handleCreateRegion = async (req, res) => {
-  const { regionName } = req.body;
-
   try {
-    // DTO로 데이터 변환
-    const regionDTO = RegionDTO.fromRequestBody(req.body);
-
-    // 지역 추가
-    const regionId = await createRegion(regionDTO);
-
-    res.status(201).json({
-      message: "지역이 추가되었습니다.",
-      regionId,
+    const regionDTO = req.body;
+    const region = await createRegion(regionDTO);
+    res.status(StatusCodes.CREATED).success({
+      message: "지역이 성공적으로 추가되었습니다.",
+      region,
     });
   } catch (error) {
-    res.status(400).json({
-      message: `지역 추가 중 오류가 발생했습니다. (${error.message})`,
-    });
+    if (error instanceof RegionCreationError) {
+      res.status(StatusCodes.BAD_REQUEST).error({
+        errorCode: error.errorCode,
+        reason: error.reason,
+        data: error.data,
+      });
+    } else {
+      console.error("예기치 못한 오류:", error);
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).error({
+        errorCode: "unknown_error",
+        reason: "서버에서 오류가 발생했습니다.",
+      });
+    }
   }
 };

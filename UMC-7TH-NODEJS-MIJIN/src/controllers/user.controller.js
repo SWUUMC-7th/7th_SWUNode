@@ -1,3 +1,4 @@
+import { prisma } from '../db.config.js';
 import { StatusCodes } from "http-status-codes";
 import { bodyToUser } from "../dtos/user.dto.js";
 import { userSignUp } from "../services/user.service.js";

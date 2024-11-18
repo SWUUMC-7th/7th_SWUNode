@@ -1,14 +1,38 @@
-import { findUserMission, addUserMission } from "../repositories/userMission.repository.js";
+import { prisma } from "../db.config.js";
+import { MissionChallengeError } from "../errors.js";
 
 // 미션 도전하기
 export const challengeMission = async (userId, missionId) => {
-  // 미션 도전 여부 확인
-  const existingMission = await findUserMission(userId, missionId);
-  if (existingMission) {
-    throw new Error(`이미 도전 중인 미션입니다.`); // 도전 중인 경우 오류 발생
-  }
+  try {
+    const existingChallenge = await prisma.userMission.findUnique({
+      where: { userId_missionId: { userId, missionId } },
+    });
 
-  // 도전 추가
-  const newUserMission = await addUserMission({ userId, missionId });
-  return newUserMission;
+    if (existingChallenge) {
+      throw new MissionChallengeError("이미 도전 중인 미션입니다.", {
+        userId,
+        missionId,
+      });
+    }
+
+    const newChallenge = await prisma.userMission.create({
+      data: {
+        userId,
+        missionId,
+        status: "in_progress",
+      },
+    });
+
+    return newChallenge;
+  } catch (error) {
+    if (error instanceof MissionChallengeError) {
+      throw error; // 사용자 정의 오류 재발생
+    }
+    console.error("미션 도전 중 오류 발생:", error);
+    throw new MissionChallengeError("미션 도전에 실패했습니다.", {
+      userId,
+      missionId,
+      originalError: error.message,
+    });
+  }
 };
