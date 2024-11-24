@@ -1,25 +1,13 @@
 import {addChallenge, getChallengeById, isChallengeExists} from "../repositories/challenge.repository.js";
 import {responseFromChallenge} from "../dtos/challenge.dto.js";
 
-export const challengeSignUp = async (data) => {
-    // 도전하려는 미션에 이미 도전 중인지를 확인
-    const ChallengeExists = await isChallengeExists(
-        data.missionId
-    );
-
-    if (ChallengeExists) {
-        throw new Error("이미 도전 중인 미션");
-    }
-
-    // 미션 도전 등록
-    const challengeId = await addChallenge({
-        missionId: data.missionId,
-    });
-
+export const addChallenge = async (db, data) => {
+    const challengeId = await addChallenge(db, data);
+  
     if (!challengeId) {
-        throw new Error("Mission Challenge 등록에 실패했습니다.");
+      throw new Error("챌린지를 추가할 수 없습니다.");
     }
-
-    const challenge = await getCallengeById(challengeId);
+  
+    const challenge = await getChallengeById(db, challengeId);
     return responseFromChallenge(challenge);
-};
+  };

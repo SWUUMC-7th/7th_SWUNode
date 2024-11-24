@@ -1,11 +1,17 @@
-//가게
+// src/dtos/store.dto.js
 export const bodyToStore = (body) => {
-    return {
-      name: body.name,
-      regionId: body.regionId,
+  return {
+      storeName: body.storeName,
       address: body.address,
-      detailAddress: body.detailAddress || "",
-      phone_number: body.phone_number,
-    };
+      regionId: body.regionId,
   };
-  
+};
+
+export const responseFromStore = (store) => {
+  return {
+      storeId: store.storeId,
+      storeName: store.storeName,
+      address: store.address,
+      regionId: store.regionId,
+  };
+};

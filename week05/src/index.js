@@ -1,34 +1,36 @@
-import dotenv from "dotenv";
-import express from 'express'
-import cors from 'cors';
-import { handleUserSignUp } from "./controllers/user.controller.js";
-import { handleAddStore } from "./controllers/store.controller.js";
-import { handleAddReview } from "./controllers/review.controller.js";
-import { handleAddMission } from "./controllers/mission.controller.js";
-import { handleAddChallenge } from "./controllers/challenge.controller.js";
-dotenv.config();
+// src/index.js
+import express from "express";
+import cors from "cors";
 
 
-const app = express()
-const port = process.env.PORT;
 
-app.use(cors());                            // cors 방식 허용
-app.use(express.static('public'));          // 정적 파일 접근
-app.use(express.json());                    // request의 본문을 json으로 해석할 수 있도록 함 (JSON 형태의 요청 body를 파싱하기 위함)
-app.use(express.urlencoded({ extended: false })); // 단순 객체 문자열 형태로 본문 데이터 해석
-
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
-
-app.post("/users", handleUserSignUp);
-
-app.post("/stores", handleAddStore);
-app.post("/stores/:storeId/reviews", handleAddReview);
-app.post("/stores/:storeId/missions", handleAddMission);
-app.post("/missions/active", handleAddChallenge);
+import { handleStoreSignUp } from "./controller/store.controller.js";
+import { handleReviewSignUp } from "./controller/review.controller.js";
+import { handleMissionSignUp } from "./controller/mission.controller.js";
+import { handleChallengeSignUp } from "./controller/challenge.controller.js";
 
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+app.use(express.json());
+app.use(cors());
+
+// 가게 추가 API
+app.post("/api/stores", handleStoreSignUp);
+
+// 가게 리뷰 추가 API
+app.post("/api/reviews", handleReviewSignUp);
+
+// 가게 미션 추가 API
+app.post("/api/missions", handleMissionSignUp);
+
+// 가게의 미션 도전하기 API
+app.post("/api/challenges", handleChallengeSignUp);
+
+
+
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});

@@ -1,15 +1,13 @@
-//가게에 리뷰 추가하기
+// src/controller/review.controller.js
 import { StatusCodes } from "http-status-codes";
 import { bodyToReview } from "../dtos/review.dto.js";
-import { addReview } from "../services/review.service.js";
+import { reviewSignUp } from "../services/review.service.js";
 
-export const handleAddReview = async (req, res) => {
-  try {
-    const review = bodyToReview(req.body);
-    const result = await addReview(review);
-    res.status(StatusCodes.CREATED).json({ result });
-  } catch (error) {
-    console.error(error);
-    res.status(StatusCodes.INTERNAL_SERVER_ERROR).send('Server error');
-  }
+export const handleReviewSignUp = async (req, res, next) => {
+    try {
+        const review = await reviewSignUp(bodyToReview(req.body));
+        res.status(StatusCodes.CREATED).json({ result: review });
+    } catch (error) {
+        res.status(StatusCodes.BAD_REQUEST).json({ error: error.message });
+    }
 };

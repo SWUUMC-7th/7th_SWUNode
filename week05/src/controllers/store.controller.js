@@ -1,16 +1,13 @@
-//특정 지역에 가게 추가하기
+// src/controller/store.controller.js
 import { StatusCodes } from "http-status-codes";
 import { bodyToStore } from "../dtos/store.dto.js";
-import { addStore } from "../services/store.service.js";
+import { storeSignUp } from "../services/store.service.js";
 
-export const handleAddStore = async (req, res) => {
-  try {
-    const store = bodyToStore(req.body);
-    const result = await addStore(store);
-    res.status(StatusCodes.CREATED).json({ result });
-  } catch (error) {
-    console.error(error);
-    res.status(StatusCodes.INTERNAL_SERVER_ERROR).send('Server error');
-  }
+export const handleStoreSignUp = async (req, res, next) => {
+    try {
+        const store = await storeSignUp(bodyToStore(req.body));
+        res.status(StatusCodes.CREATED).json({ result: store });
+    } catch (error) {
+        res.status(StatusCodes.BAD_REQUEST).json({ error: error.message });
+    }
 };
-

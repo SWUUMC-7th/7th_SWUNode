@@ -1,6 +1,6 @@
 import { StatusCodes } from "http-status-codes";
 import { bodyToMission } from "../dtos/mission.dto.js";
-import { addMission } from "../services/mission.service.js";
+import { addMission } from "../repositories/mission.repository.js";
 
 export const handleAddMission = async (req, res) => {
   try {

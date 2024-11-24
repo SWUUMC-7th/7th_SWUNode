@@ -1,9 +1,19 @@
+// src/dtos/review.dto.js
 export const bodyToReview = (body) => {
-    return {
-      storeId: body.storeId,
+  return {
       userId: body.userId,
+      storeId: body.storeId,
       rating: body.rating,
-      comment: body.comment,
-    };
+      reviewText: body.reviewText,
   };
-  
+};
+
+export const responseFromReview = (review) => {
+  return {
+      reviewId: review.reviewId,
+      userId: review.userId,
+      storeId: review.storeId,
+      rating: review.rating,
+      reviewText: review.reviewText,
+  };
+};

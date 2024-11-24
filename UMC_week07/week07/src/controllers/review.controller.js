@@ -1,12 +1,16 @@
-import { reviewSignUp } from "../services/review.service.js";
+import { StatusCodes } from "http-status-codes";
+import { bodyToReview } from "../dtos/review.dto.js";
+import { addReview } from "../services/review.service.js";
 
-export const handleReviewSignUp = async (req, res) => {
-    try {
-        const reviewData = req.body;
-        console.log(req.body);
-        const reivew = await reivewSignUp(reivewData);
-        res.status(201).json(reivew);
-    } catch (err) {
-        res.status(500).json({message: err.message});
-    }
+export const handleAddReview = async (req, res, next) => {
+  try {
+    console.log("리뷰 작성을 요청했습니다!");
+    console.log("body:", req.body); // 값이 잘 들어오나 확인하기 위한 테스트용
+
+    const review = await addReview(bodyToReview(req.body));
+
+    res.status(StatusCodes.OK).success(review);
+  } catch (err) {
+    next(err);
+  }
 };

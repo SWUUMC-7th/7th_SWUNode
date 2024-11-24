@@ -9,13 +9,19 @@ export const responseFromReviews = (reviews) => {
 
   export const bodyToStore = (body) => {
     return {
-        name: body.name
+        name: body.name,
+        address: body.address,
+        regionId: body.regionId,
+        contactNumber: body.contactNumber,
     };
   };
 
   export const responseFromStore = (store) => {
     return {
         id : store.id,
-        name : store.name
+        name : store.name,
+        address: store.address,
+        regionId: store.regionId,
+        contactNumber: store.contactNumber,
     };
   };

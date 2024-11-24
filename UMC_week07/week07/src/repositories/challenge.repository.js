@@ -1,7 +1,7 @@
 import {pool} from "../db.config.js";
 
 // Challenge 데이터 삽입
-export const addChallenge = async (data) => {
+export const addChallenge = async (db, data) => {
     const conn = await pool.getConnection();
     try {
         const [result] = await conn.query(
@@ -17,7 +17,7 @@ export const addChallenge = async (data) => {
 };
 
 // Challenge 정보 얻기
-export const getChallengeById = async (challengeId) => {
+export const getChallengeById = async (db, challengeId) => {
     const conn = await pool.getConnection();
     try {
         const [rows] = await conn.query(`SELECT * FROM challenge WHERE challenge_id = ?;`,

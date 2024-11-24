@@ -18,3 +18,14 @@ export const storeSignUp = async (data) => {
     const store = await getStoreById(storeId);
     return responseFromStore({store});
 }
+
+export const addStore = async (db, data) => {
+    const storeId = await addStore(db, data);
+  
+    if (!storeId) {
+      throw new Error("가게를 추가할 수 없습니다.");
+    }
+  
+    const store = await getStoreById(db, storeId);
+    return responseFromStore(store);
+  };

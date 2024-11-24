@@ -22,3 +22,15 @@ export const reviewSignUp = async (data) => {
     const review = await getReviewById(reviewId);
     return responseFromReview({review});
 };
+
+export const addReview = async (db, data) => {
+    const reviewId = await addReview(db, data);
+  
+    if (!reviewId) {
+      throw new Error("리뷰를 추가할 수 없습니다.");
+    }
+  
+    const review = await getReviewById(db, reviewId);
+    return responseFromReview(review);
+  };
+  
