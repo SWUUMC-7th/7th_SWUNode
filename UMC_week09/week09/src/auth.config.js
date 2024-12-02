@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
+import { Strategy as NaverStrategy } from "passport-naver-v2";
 import { prisma } from "./db.config.js";
 
 dotenv.config();
@@ -44,3 +45,38 @@ const googleVerify = async (profile) => {
   
     return { id: created.id, email: created.email, name: created.name };
   };
+
+  export const naverStrategy = new NaverStrategy(
+    {
+      clientID: process.env.NAVER_ID,
+      clientSecret: process.env.NAVER_SECRET,
+      callbackURL: "/auth/naver/callback",
+    },
+    async (accessToken, refreshToken, profile, done) => {
+      try {
+        console.log("Naver profile:", profile);
+  
+        const existingUser = await prisma.user.findFirst({
+          where: { snsId: profile.id, provider: "naver" },
+        });
+  
+        if (existingUser) {
+          return done(null, existingUser);
+        }
+  
+        const newUser = await prisma.user.create({
+          data: {
+            email: profile.email,
+            nick: profile.name,
+            snsId: profile.id,
+            provider: "naver",
+          },
+        });
+  
+        return done(null, newUser);
+      } catch (error) {
+        console.error(error);
+        return done(error);
+      }
+    }
+  );

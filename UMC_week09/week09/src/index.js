@@ -10,7 +10,10 @@ import { PrismaSessionStore } from "@quixo3/prisma-session-store";
 import session from "express-session";
 import passport from "passport";
 import { googleStrategy } from "./auth.config.js";
+import { naverStrategy } from "./naverStrategy.js";
+import { localStrategy } from "./localStrategy.js"; // Assuming you have a similar local strategy implementation
 import { prisma } from "./db.config.js";
+
 
 
 
@@ -22,6 +25,25 @@ passport.serializeUser((user, done) => done(null, user));
 //위의 한줄 코드: Session에 사용자 정보를 저장할 때
 passport.deserializeUser((user, done) => done(null, user));
 //위의 한줄 코드: Session의 정보를 가져올 때
+
+//네이버
+export const configurePassport = () => {
+  passport.use(naverStrategy);
+  passport.use(localStrategy);
+
+  passport.serializeUser((user, done) => {
+    done(null, user.id);
+  });
+
+  passport.deserializeUser(async (id, done) => {
+    try {
+      const user = await prisma.user.findUnique({ where: { id } });
+      return done(null, user);
+    } catch (error) {
+      return done(error);
+    }
+  });
+};
 
 
 const app = express();
@@ -120,6 +142,17 @@ app.get(
     failureMessage: true,
   }),
   (req, res) => res.redirect("/")
+);
+
+//네이버로 로그인하기 라우터
+app.get("/oauth2/login/naver", passport.authenticate("naver", {authType: "reprompt"}));
+//위에서 네이버 로그인 서버가 되면 redirect url 설정에 따라..
+app.get(
+  "/oauth2/callback/naver",
+  passprot.authenticate("naver", {failureRedirect: '/'}),
+  (req, res) => {
+    res.redirect('/');
+  },
 );
 
 app.post("/api/v1/users/signup", handleUserSignUp);
