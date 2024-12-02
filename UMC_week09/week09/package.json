@@ -6,13 +6,17 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node src/index.js",
-    "dev": "nodemon --exec node src/index.js"
+    "dev": "nodemon -e js,json,prisma --exec \"prisma generate && node src/index.js\""
   },
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "express": "^5.0.0"
+    "@prisma/client": "^6.0.0",
+    "express": "^5.0.0",
+    "prisma": "^6.0.0",
+    "swagger-autogen": "^2.23.7",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.7"
