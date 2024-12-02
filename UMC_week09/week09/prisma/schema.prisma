@@ -112,3 +112,16 @@ model Review {
   body       String  @db.Text
   //score
 }
+
+model Session {
+  id        String   @id
+  sid       String   @unique
+  data      String   @db.VarChar(512)
+  expiresAt DateTime @map("expires_at")
+
+  @@map("session")
+
+  //sid라는 값을 통해 Session을 식별
+  //data에는 자유롭게 사용자의 정보를 저장
+  //expiresAt 을 통해 Session의 만료 시간(기본 1주일 정도) 설정
+}

@@ -19,7 +19,7 @@ export const storeSignUp = async (data) => {
     return responseFromStore({store});
 }
 
-export const addStore = async (db, data) => {
+export const registerStore = async (db, data) => {
     const storeId = await addStore(db, data);
   
     if (!storeId) {

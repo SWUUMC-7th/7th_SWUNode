@@ -3,7 +3,7 @@ import {pool} from "../db.config.js";
 // Store 데이터 삽입하기
 export const addStore = async (db, data) => {
     const [storeId] = await db("stores").insert(data).returning("id");
-  return storeId ? { ...Data, id: storeId } : null;
+  return storeId ? { ...data, id: storeId } : null;
 };
 
 
